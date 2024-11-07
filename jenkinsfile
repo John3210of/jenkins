@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                // Git 저장소에서 코드 체크아웃
+                git url: 'https://github.com/John3210of/jenkins', branch: 'main'
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                // Python 및 필요한 패키지 설치
+                sh 'python3 -m venv venv'
+                sh './venv/bin/pip install -r requirements.txt || true' // requirements.txt가 없을 경우 무시
+            }
+        }
+        stage('Run Calculator') {
+            steps {
+                sh './venv/bin/python calculator.py'
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline execution completed."
+        }
+    }
+}
