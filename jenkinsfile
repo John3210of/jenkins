@@ -25,18 +25,18 @@ pipeline {
         stage('Check and Run Docker Image') {
             steps {
                 script {
-                    sh "docker pull ${IMAGE_NAME}"
-                    sh "docker stop apiserver || true"
-                    sh "docker rm apiserver || true"
-                    sh "docker run -d --name apiserver -p 5000:5000 ${IMAGE_NAME}"
+                    sh "sudo docker pull ${IMAGE_NAME}"
+                    sh "sudo docker stop apiserver || true"
+                    sh "sudo docker rm apiserver || true"
+                    sh "sudo docker run -d --name apiserver -p 5000:5000 ${IMAGE_NAME}"
                 }
             }
         }
         stage('Run Calculator Tests on Docker') {
             steps {
                 script {
-                    sh "docker exec apiserver coverage run -m unittest discover -s tests"
-                    sh "docker exec apiserver coverage report -m"
+                    sh "sudo docker exec apiserver coverage run -m unittest discover -s tests"
+                    sh "sudo docker exec apiserver coverage report -m"
                 }
             }
         }
