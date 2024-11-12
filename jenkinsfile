@@ -26,10 +26,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'root', usernameVariable: 'ROOT_USER', passwordVariable: 'ROOT_PASSWORD')]) {
-                        sh "echo ${ROOT_PASSWORD} | sudo -S docker pull ${IMAGE_NAME}"
+                        sh "echo ${ROOT_PASSWORD} > /tmp/sudo_password"
                         sh "echo ${ROOT_PASSWORD} | sudo -S docker stop apiserver || true"
                         sh "echo ${ROOT_PASSWORD} | sudo -S docker rm apiserver || true"
                         sh "echo ${ROOT_PASSWORD} | sudo -S docker run -d --name apiserver -p 5000:5000 ${IMAGE_NAME}"
+                        sh "rm -f /tmp/sudo_password"
                     }
                 }
             }
