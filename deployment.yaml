@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: apiserver
-          image: john3210of/apiserver:2.0
+          image: john3210of/apiserver:3.0
           ports:
             - containerPort: 5000
           env:
