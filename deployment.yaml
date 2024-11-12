@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apiserver-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apiserver
+  template:
+    metadata:
+      labels:
+        app: apiserver
+    spec:
+      containers:
+        - name: apiserver
+          image: john3210of/apiserver:2.0
+          ports:
+            - containerPort: 5000
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP

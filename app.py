@@ -1,8 +1,12 @@
 # app.py
 from flask import Flask, request
 from calculator import add, subtract, multiply, divide
+import os
 
 app = Flask(__name__)
+
+pod_name = os.getenv('POD_NAME', 'Unknown Pod')
+pod_ip = os.getenv('POD_IP', 'Unknown IP')
 
 @app.route('/calculate')
 def calculate():
@@ -24,7 +28,8 @@ def calculate():
     else:
         return "Unknown operation.", 400
 
-    return str(result)
+    # 결과에 Pod 이름과 IP를 포함하여 로드 밸런싱 상태를 확인할 수 있게 함
+    return f"Result: {result}\nServed by: {pod_name} ({pod_ip})"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

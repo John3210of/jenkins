@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'john3210of/apiserver:2.0'
+        IMAGE_NAME = 'john3210of/apiserver:3.0'
     }
     
     stages {
@@ -22,14 +22,19 @@ pipeline {
                 sh './venv/bin/coverage report -m'
             }
         }
-        stage('Docker Login and Run Image') {
+        stage('Docker Build and Push') {
             steps {
                 script {
-                    sh "sudo docker pull ${IMAGE_NAME}"
-                    sh "sudo docker stop apiserver || true"
-                    sh "sudo docker rm apiserver || true"
-                    sh "sudo docker run -d --name apiserver -p 5000:5000 ${IMAGE_NAME}"
-                    }
+                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "docker push ${IMAGE_NAME}"
+                }
+            }
+        }
+        stage('Kubernetes Deploy') {
+            steps {
+                script {
+                    sh "kubectl apply -f deployment.yaml"
+                    sh "kubectl apply -f service.yaml"
                 }
             }
         }
