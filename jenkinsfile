@@ -18,6 +18,10 @@ pipeline {
         }
         stage('Run Tests with Coverage') {
             steps {
+                // Docker Hub에 로그인
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                }
                 sh './venv/bin/coverage run -m unittest discover -s tests'
                 sh './venv/bin/coverage report -m'
             }
