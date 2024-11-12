@@ -25,13 +25,10 @@ pipeline {
         stage('Docker Login and Run Image') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'root', usernameVariable: 'ROOT_USER', passwordVariable: 'ROOT_PASSWORD')]) {
-                        sh "echo ${ROOT_PASSWORD} > /tmp/sudo_password"
-                        sh "sudo -S docker pull ${IMAGE_NAME} < /tmp/sudo_password"
-                        sh "sudo -S docker stop apiserver || true < /tmp/sudo_password"
-                        sh "sudo -S docker rm apiserver || true < /tmp/sudo_password"
-                        sh "sudo -S docker run -d --name apiserver -p 5000:5000 ${IMAGE_NAME} < /tmp/sudo_password"
-                        sh "rm -f /tmp/sudo_password"
+                    sh "sudo docker pull ${IMAGE_NAME}"
+                    sh "sudo docker stop apiserver || true"
+                    sh "sudo docker rm apiserver || true"
+                    sh "sudo docker run -d --name apiserver -p 5000:5000 ${IMAGE_NAME}"
                     }
                 }
             }
