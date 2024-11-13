@@ -31,7 +31,7 @@ pipeline {
                 -e DB_PORT=$DB_PORT \
                 ${IMAGE_NAME}
             """
-            sh "docker exec test_container sh -c 'coverage run --source=\"blog\" manage.py test blog.tests && coverage report -m'"
+            sh "docker exec test_container sh -c 'coverage run --source=\"blog\" manage.py test blog.tests --noinput && coverage report -m'"
             sh "docker stop test_container"
             sh "docker rm test_container"
         }
