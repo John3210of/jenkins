@@ -13,14 +13,14 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "docker build -t ${IMAGE_NAME} blog_project"
                 }
             }
         }
         stage('Run Tests with Coverage') {
             steps {
                 script {
-                    sh "docker run --rm ${IMAGE_NAME} sh -c 'python3 -m venv venv && ./venv/bin/pip install -r requirements.txt && ./venv/bin/coverage run --source=\"blog\" manage.py test blog.tests && ./venv/bin/coverage report -m'"
+                    sh "docker run --rm ${IMAGE_NAME} sh -c 'cd blog_project && python3 -m venv venv && ./venv/bin/pip install -r requirements.txt && ./venv/bin/coverage run --source=\"blog\" manage.py test blog.tests && ./venv/bin/coverage report -m'"
                 }
             }
         }
