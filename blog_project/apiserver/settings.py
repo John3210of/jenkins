@@ -23,8 +23,7 @@ DEBUG = True
 if DJANGO_ENV != 'local':
     DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["3.34.184.14", "localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
