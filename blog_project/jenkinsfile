@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     sh "docker run -d --name test_container ${IMAGE_NAME}"
-                    sh "docker exec test_container sh -c 'python3 -m venv venv && ./venv/bin/pip install -r requirements.txt && ./venv/bin/coverage run --source=\"blog\" manage.py test blog.tests && ./venv/bin/coverage report -m'"
+                    sh "docker exec test_container sh -c 'coverage run --source=\"blog\" manage.py test blog.tests && coverage report -m'"
                     sh "docker stop test_container"
                     sh "docker rm test_container"
                 }
