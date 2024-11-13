@@ -18,18 +18,25 @@ pipeline {
             }
         }
         stage('Run Tests with Coverage') {
-            steps {
-                script {
-                    sh "docker rm -f test_container || true"
-                    sh "docker run -d --name test_container ${IMAGE_NAME}"
-                    sh "docker exec test_container sh -c 'coverage run --source=\"blog\" manage.py test blog.tests'"
-                    sh "docker exec test_container sh -c 'coverage report -m'"
-                    sh "docker logs test_container"
-                    sh "docker stop test_container"
-                    sh "docker rm test_container"
-                    }
-            }
+    steps {
+        script {
+            sh "echo -e DB_NAME=$DB_NAME"
+            sh "docker rm -f test_container || true"
+            sh """
+                docker run -d --name test_container \
+                -e DB_NAME=$DB_NAME \
+                -e DB_USER=$DB_USER \
+                -e DB_PASSWORD=$DB_PASSWORD \
+                -e DB_HOST=$DB_HOST \
+                -e DB_PORT=$DB_PORT \
+                ${IMAGE_NAME}
+            """
+            sh "docker exec test_container sh -c 'coverage run --source=\"blog\" manage.py test blog.tests && coverage report -m'"
+            sh "docker stop test_container"
+            sh "docker rm test_container"
         }
+    }
+}
 
         stage('Docker Push') {
             steps {
