@@ -9,10 +9,11 @@ pipeline {
             steps {
                 git url: 'https://github.com/John3210of/jenkins', branch: 'main'
                 sh "ls -al"
-                echo 'asdlfasdfasdfslkad'
+                sh "cd blog_project"
+                echo '*************************************'
+                sh "ls -al"
             }
         }
-
 
 
         stage('Docker Build') {
