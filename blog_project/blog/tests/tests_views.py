@@ -9,19 +9,14 @@ class BoardModelTests(TestCase):
         self.valid_data = {
             'title': 'Valid Title',
             'content': 'This is valid content.',
-            'created_at': '2024-11-13T12:00:00',
-            'updated_at': '2024-11-13T12:00:00',
         }
         self.invalid_data_missing_field = {
             'content': 'Missing title field.',  # title 필드가 누락된 데이터
-            'created_at': '2024-11-13T12:00:00',
-            'updated_at': '2024-11-13T12:00:00',
         }
         self.invalid_data_wrong_format = {
             'title': 'Invalid Title',
             'content': 'This is invalid content.',
             'created_at': 'invalid-date-format',  # 잘못된 날짜 형식
-            'updated_at': '2024-11-13T12:00:00',
         }
 
     def test_create_board_with_valid_data(self):
